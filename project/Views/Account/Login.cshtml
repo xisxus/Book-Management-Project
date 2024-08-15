@@ -1,0 +1,51 @@
+﻿@model LoginViewModel
+@{
+    ViewData["Title"] = "Login";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>User Login</h1>
+<div class="row">
+    <form method="post">
+        <input type="hidden" name="returnUrl" value="@ViewBag.ReturnUrl" />
+        <div asp-validation-summary="All" class="text-danger"></div>
+        <div class="mb-3">
+            <label asp-for="Email" class="form-label">User Email</label>
+            <input asp-for="Email" class="form-control" placeholder="User Email">
+            <span asp-validation-for="Email" class="text-danger"></span>
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="Password" class="form-label">Password</label>
+            <input asp-for="Password" class="form-control" placeholder="Password">
+            <span asp-validation-for="Password" class="text-danger"></span>
+        </div>
+
+        <div class="mb-3">
+            <div class="form-check-input">
+                <label asp-for="RememberMe">
+                    <input asp-for="RememberMe" />
+                    @Html.DisplayNameFor(m => m.RememberMe)
+                </label>
+            </div>
+        </div>
+
+        <div class="mb-3">
+            <button type="submit" class="btn btn-success">Submit</button>
+        </div>
+
+        <div class="mt-3">
+            <p>Don't have an account? <a asp-controller="Account" asp-action="Registration" asp-route-returnUrl="@ViewBag.ReturnUrl">Sign up here</a></p>
+
+            <p><a asp-controller="Account" asp-action="ForgotPassword">Forgot your password?</a></p>
+
+        </div>
+
+    </form>
+</div>
+
+
+
+
+
+

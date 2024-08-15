@@ -1,0 +1,311 @@
+﻿@model BookViewModel
+@{
+    ViewData["Title"] = "BookDetails";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<style>
+    .comment-section {
+        max-height: 400px; /* Adjust this value as needed */
+        overflow-y: auto;
+        padding: 10px; /* Optional, for padding around the content */
+        border: 1px solid #ddd; /* Optional, for visual separation */
+        border-radius: 8px; /* Optional, for rounded corners */
+        background-color: #f9f9f9; /* Optional, for background color */
+    }
+
+        .comment-section hr {
+            margin: 10px 0; /* Optional, for spacing around the horizontal rule */
+        }
+
+</style>
+
+
+<h2>BookDetails</h2>
+
+<div class="container-fluid mt-2 mb-3">
+    <div class="row no-gutters">
+        <!-- Left Column -->
+        <div class="col-md-5 pr-2">
+            <div class="card">
+                <div class="demo">
+                    <ul id="lightSlider">
+                        <!-- Example image, replace with your book cover image URL -->
+                        <li><img src="@Model.Book.PhotoUrl" height="300" /></li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Reviews Section -->
+            <div class="card mt-2">
+                <h6>Reviews</h6>
+                <div class="d-flex flex-row">
+                    <div class="stars">
+                        @for (var i = 0; i < 5; i++)
+                        {
+                            <i class="fa fa-star @(i < Model.AverageRating ? "checked" : "")"></i>
+                        }
+                    </div>
+                    <span class="ml-1 font-weight-bold">@Model.ReviewCount reviews</span>
+                </div>
+                <hr> 
+                <div class="badges">
+                    <span class="badge bg-dark">All</span>
+                    <span class="badge bg-dark"><i class="fa fa-image"></i></span>
+                    <span class="badge bg-dark"><i class="fa fa-comments-o"></i></span>
+                    <span class="badge bg-warning">
+                        @for (var i = 0; i < Model.AverageRating; i++)
+                        {
+                            <i class="fa fa-star"></i>
+                        }
+                        <span class="ml-1">@Model.AverageRating</span>
+                    </span>
+                </div>
+                <hr> 
+
+             
+
+                @* <div class="comment-section">
+                    @foreach (var review in Model.Book.Reviews)
+                    {
+
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div class="d-flex flex-row align-items-center">
+
+
+                                @if (review.User.Photo != null && review.User.Photo.Length > 0)
+                                {
+                                    var base64String = Convert.ToBase64String(review.User.Photo);
+                                    var imageDataUrl = $"data:image/jpeg;base64,{base64String}";
+                                    <img src="@imageDataUrl" alt="Profile Photo" class="rounded-circle profile-image" height="50" width="50" />
+                                }
+                                else
+                                {
+                                    <img src="~/uploads/images (2).jpg" alt="Default Photo" class="rounded-circle profile-image" height="50" width="50" />
+                                }
+
+                                <div class="d-flex flex-column ml-1 comment-profile">
+                                    <div class="comment-ratings">
+                                        @for (var i = 0; i < review.Rating; i++)
+                                        {
+                                            <i class="fa fa-star"></i>
+                                        }
+                                    </div>
+                                    <span class="username">@review.User.FullName</span>
+                                </div>
+                            </div>
+                            <div class="date"><span class="text-muted">@review.DatePosted.ToShortDateString()</span></div>
+                        </div>
+
+                        <div class="comment-content">
+                            <p>@review.Comment</p>
+                        </div>
+                        <hr>
+                    }
+                </div> *@
+
+        
+
+
+
+
+                <div class="comment-section">
+                    <div class="ClientReview_Card">
+                        @foreach (var review in Model.Book.Reviews)
+                        {
+                            <div class="ClientReview_Top">
+                                <div class="ClientReview_Pfp">
+                                    @if (review.User.Photo != null && review.User.Photo.Length > 0)
+                                    {
+                                        var base64String = Convert.ToBase64String(review.User.Photo);
+                                        var imageDataUrl = $"data:image/jpeg;base64,{base64String}";
+                                        <img src="@imageDataUrl" alt="Profile Photo" />
+                                    }
+                                    else
+                                    {
+                                        <img src="~/uploads/images (2).jpg" alt="Default Photo" />
+                                    }
+                                </div>
+                                <div class="ClientReview_Stars">
+                                    @for (var i = 0; i < review.Rating; i++)
+                                    {
+                                        <span>★</span>
+                                        @* <i class="fa fa-star"></i> *@
+                                    }
+                                </div>
+                            </div>
+                            <div class="ClientReview_Body">
+                                "@review.Comment"
+                            </div>
+                            <div class="ClientReview_Name">
+                                — @review.User.FullName
+                            </div>
+                            <!-- Optional Logo Image -->
+                            <div class="ClientReview_Img">
+                                <div class="date"><span class="text-muted">@review.DatePosted.ToShortDateString()</span></div>
+                            </div>
+                           
+
+                            <hr />
+                            <hr />
+                        }
+                    </div>
+
+                </div>
+
+
+
+
+            </div>
+        </div>
+
+        <!-- Right Column -->
+        <div class="col-md-7">
+            <div class="card">
+                <div class="d-flex flex-row align-items-center">
+                    <!-- Book title and details -->
+                </div>
+                <div class="about">
+                    <span class="font-weight-bold">Title:</span>
+                    <h4 class="font-weight-bold">@Model.Book.Title</h4>
+                    <p><strong>Author:</strong> @Model.Book.Author</p>
+                    <p><strong>Published Date:</strong> @Model.Book.PublishedDate.ToShortDateString()</p>
+                    <p><strong>Description:</strong></p>
+                    <p>@Model.Book.Description</p>
+                </div>
+                <hr>
+
+
+                @* <div class="product-description">
+                    <div><span class="font-weight-bold">Color:</span><span>@Model.Book.PublishedDate</span></div>
+                    <!-- Example for color options, replace with actual data if needed -->
+                    <div class="my-color">
+                        <!-- Color options -->
+                    </div>
+                    <div class="d-flex flex-row align-items-center">
+                        <i class="fa fa-calendar-check-o"></i>
+                        <span class="ml-1">Date Added</span>
+                    </div>
+                    <div class="mt-2">
+                        <span class="font-weight-bold">Store:</span>
+                        <div class="d-flex flex-row align-items-center">
+                            <img src="/path-to-store-image.jpg" class="rounded-circle store-image">
+                            <div class="d-flex flex-column ml-1 comment-profile">
+                                <div class="comment-ratings">
+                                    @for (var i = 0; i < 5; i++)
+                                    {
+                                        <i class="fa fa-star"></i>
+                                    }
+                                </div>
+                                <span class="username">Store Name</span>
+                                <small class="followers">Followers count</small>
+                            </div>
+                        </div>
+                    </div>
+                </div> *@
+
+
+            </div>
+            <!-- Similar Items and Review Section -->
+            <div class="card mt-2">
+               
+                <div class="wrapper">
+                    <form asp-action="SubmitReview" asp-controller="Books" method="post" class="review-form">
+                        <div class="master">
+                            <h1>Review And Rating</h1>
+                            <h2>How was your experience with our product?</h2>
+                            <div class="rating-component">
+                                <div class="status-msg">
+                                    <input class="rating_msg" type="hidden" name="rating_msg" value="" />
+                                </div>
+                                <div class="stars-box">
+                                    @for (var i = 1; i <= 5; i++)
+                                    {
+                                        <i class="star fa fa-star" title="@i star@(i > 1 ? "s" : "")" data-value="@i"></i>
+                                    }
+                                </div>
+                                <div class="starrate">
+                                    <input class="ratevalue" type="hidden" name="rating" value="" />
+                                </div>
+                            </div>
+                            <div class="feedback-tags">
+                                <div class="tags-box">
+                                    <textarea name="comment" class="tag form-control" placeholder="Please enter your review"></textarea>
+                                    <input type="hidden" name="bookId" value="@Model.Book.BookId" />
+                                </div>
+                            </div>
+                            <div class="button-box">
+                                <button type="submit" class="done btn btn-primary" disabled="disabled">Submit Review</button>
+                            </div>
+                            <div class="submited-box" style="display:none;">
+                                <div class="loader"></div>
+                                <div class="success-message">
+                                    Thank you!
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+
+               
+
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<style>
+    .ClientReview_Card {
+       @*  min-height: 355px;
+        border-top: 5px solid #13588F;
+        box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+        font-weight: 700; *@
+        overflow: hidden;
+       @*  padding: 60px 50px 0px; *@
+        position: relative;
+        margin-bottom: 20px; /* Adjust for spacing between cards */
+    }
+
+    .ClientReview_Top {
+        display: flex;
+        align-items: center;
+        padding-bottom: 30px;
+    }
+
+    .ClientReview_Pfp {
+        width: 70px;
+    }
+
+        .ClientReview_Pfp img {
+            border-radius: 50%;
+            width: 100%;
+            height: auto;
+        }
+
+    .ClientReview_Stars {
+        font-size: 36px;
+        padding-left: 20px;
+        color: #ffbf00;
+    }
+
+    .ClientReview_Body {
+        padding-bottom: 20px;
+    }
+
+    .ClientReview_Name {
+        color: #13588F;
+        font-size: 18px;
+        padding-bottom: 40px;
+    }
+
+    .ClientReview_Img img {
+        filter: brightness(0) invert(1) sepia(1) saturate(10000%) hue-rotate(180deg) brightness(1.1);
+        position: absolute;
+        right: -70px;
+        bottom: -50px;
+        z-index: -1;
+    }
+
+</style>

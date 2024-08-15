@@ -1,0 +1,76 @@
+﻿@model EditProfileViewModel
+@{
+    ViewData["Title"] = "EditProfile";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+
+
+<h2>Edit Profile</h2>
+
+<form asp-action="EditProfile" method="post" enctype="multipart/form-data">
+    <div class="form-group">
+        <label asp-for="FullName"></label>
+        <input asp-for="FullName" class="form-control" />
+        <span asp-validation-for="FullName" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="BirthDate"></label>
+        <input asp-for="BirthDate" class="form-control" />
+        <span asp-validation-for="BirthDate" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Photo"></label>
+        <input asp-for="Photo" type="file" class="form-control" />
+        <span asp-validation-for="Photo" class="text-danger"></span>
+
+        @if (Model.ExistingPhotoPath != null)
+        {
+            <div>
+                <label>Current Photo:</label><br />
+                <img src="data:image/jpeg;base64,@Model.ExistingPhotoPath" alt="Profile Photo" style="max-width: 150px; max-height: 150px;" />
+            </div>
+        }
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Address"></label>
+        <input asp-for="Address" class="form-control" />
+        <span asp-validation-for="Address" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="City"></label>
+        <input asp-for="City" class="form-control" />
+        <span asp-validation-for="City" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="State"></label>
+        <input asp-for="State" class="form-control" />
+        <span asp-validation-for="State" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="PostalCode"></label>
+        <input asp-for="PostalCode" class="form-control" />
+        <span asp-validation-for="PostalCode" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Country"></label>
+        <input asp-for="Country" class="form-control" />
+        <span asp-validation-for="Country" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="PhoneNumber"></label>
+        <input asp-for="PhoneNumber" class="form-control" />
+        <span asp-validation-for="PhoneNumber" class="text-danger"></span>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Save Changes</button>
+</form>

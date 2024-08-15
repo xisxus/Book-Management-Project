@@ -1,0 +1,109 @@
+﻿@model IEnumerable<BookViewModel>
+
+@{
+    ViewData["Title"] = "Book Showcase";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container">
+    <h2 class="my-4">Book Showcase</h2>
+
+    <div class="row">
+        <!-- Genre Filters -->
+        <div class="col-md-2 sticky-top">
+            <div class="form-group">
+                <h5>Select Genres:</h5>
+                @foreach (var genre in ViewBag.Genres as List<string>)
+                {
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" name="selectedGenres" value="@genre" id="genre_@genre" onchange="filterBooks()" />
+                        <label class="form-check-label" for="genre_@genre">
+                            @genre
+                        </label>
+                    </div>
+                }
+            </div>
+        </div>
+
+        <!-- Book Showcase -->
+        <div class="col-md-10">
+            <div id="bookContainer" class="row">
+                @foreach (var item in Model)
+                {
+
+                    <a href="@Url.Action("BookDetails", "Books", new { Id = item.Book.BookId })" >
+
+                    <div style="margin-bottom: 30px" class="col-lg-4 col-md-6 col-sm-12 mb-10 book-item" data-genre="@item.Book.Genre">
+                        <div class="card h-100 shadow-sm" style="transition: transform 0.3s ease;">
+                            <img src="@item.Book.PhotoUrl" class="card-img-top" alt="Book Cover" style="height: 200px; width: 200px; object-fit: cover;" />
+                            <div class="card-body text-left">
+                                <h5 class="card-title">@item.Book.Title</h5>
+                                <h6 class="card-subtitle mb-2 text-muted">by @item.Book.Author</h6>
+                                <p class="card-text">Average Rating: @item.AverageRating.ToString("0.0")</p>
+                                <p class="card-text">Number of Reviews: @item.ReviewCount</p>
+                                <p class="card-text">Published: @item.Book.PublishedDate.ToShortDateString()</p>
+                                <a href="@Url.Action("ReviewRating", "Books", new { bookId = item.Book.BookId })" class="btn btn-primary">View Reviews</a>
+                            </div>
+                        </div>
+                    </div>
+
+                       
+                    </a>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function filterBooks() {
+        // Get all checked genres
+        const checkedGenres = Array.from(document.querySelectorAll('input[name="selectedGenres"]:checked'))
+            .map(cb => cb.value);
+
+        // Animate the showing/hiding of books
+        document.querySelectorAll('.book-item').forEach(item => {
+            const bookGenre = item.getAttribute('data-genre');
+            if (checkedGenres.length === 0 || checkedGenres.includes(bookGenre)) {
+                // Fade in the book item
+                item.style.opacity = '0';
+                item.style.display = 'block';
+                setTimeout(() => {
+                    item.style.opacity = '1';
+                    item.style.transition = 'opacity 0.5s ease-in-out';
+                }, 10);
+            } else {
+                // Fade out the book item
+                item.style.opacity = '0';
+                setTimeout(() => {
+                    item.style.display = 'none';
+                }, 500); // Match the duration of the fade-out transition
+            }
+        });
+    }
+</script>
+
+<style>
+    .card:hover {
+        transform: scale(1.05);
+        z-index: 2;
+    }
+
+    .book-item {
+        transition: opacity 0.5s ease-in-out;
+        opacity: 1;
+    }
+
+    .card-img-top {
+        object-fit: cover;
+    }
+
+    .sticky-top {
+        position: -webkit-sticky; /* For Safari */
+        position: sticky;
+        top: 0; /* Adjust as needed */
+        z-index: 1020; /* Ensure it sits above other content */
+        background-color: white; /* Ensure background is white */
+        padding: 15px; /* Add padding if needed */
+    }
+</style>
