@@ -1,5 +1,6 @@
 ﻿@using Microsoft.AspNetCore.Identity
 @inject SignInManager<ApplicationUser> SignInManager
+@inject UserManager<project.Models.ApplicationUser> UserManager
 
 <!DOCTYPE html>
 <html lang="en">
@@ -96,6 +97,7 @@
                         </li>
                         <li >
                             <a href="#" data-toggle="modal" data-target="#registrationModal"><i class="fa fa-user-o"></i>Register</a>
+                            <a href="#" data-toggle="modal" data-target="#viewProfileModal"><i class="fa fa-user-o"></i>Register</a>
                         </li>
                     }
                    
@@ -184,6 +186,18 @@
         </main>
     </div>
 
+
+    @{
+        var userId = UserManager.GetUserId(User);
+    }
+
+
+    <h1>
+        <a href="@Url.Action("ProfileView", "Account", new { userId = userId })" class="btn btn-primary">
+            My Profile
+        </a>
+    </h1>
+
     <!-- Login Modal -->
     <div class="modal fade" id="loginModal" tabindex="-1" role="dialog" aria-labelledby="loginModalLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
@@ -240,6 +254,30 @@
 
 
                         @await Html.PartialAsync("_EditProfilePartial", new project.Models.ViewModels.EditProfileViewModel())
+
+                        <!-- Content will be loaded here -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- Modal -->
+    <div class="modal fade" id="viewProfileModal" tabindex="-1" role="dialog" aria-labelledby="editProfileModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="editProfileModalLabel">Edit Profile</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div id="editProfileContent">
+
+
+                        @await Html.PartialAsync("_ViewProfilePartial")
 
                         <!-- Content will be loaded here -->
                     </div>
@@ -384,6 +422,16 @@
 
             // Optional: Reset the form when the login modal is hidden
             $('#createBookModal').on('hidden.bs.modal', function () {
+                $(this).find('form')[0].reset();
+            });
+
+
+            $('#viewProfileModal').on('shown.bs.modal', function () {
+                $('#viewProfileForm input:first').trigger('focus');
+            });
+
+            // Optional: Reset the form when the login modal is hidden
+            $('#viewProfileModal').on('hidden.bs.modal', function () {
                 $(this).find('form')[0].reset();
             });
 

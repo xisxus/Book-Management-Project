@@ -5,6 +5,8 @@ using project.Models;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Humanizer;
 using project.Models.Extension;
+using Microsoft.EntityFrameworkCore;
+using project.Models.Data;
 
 
 namespace project.Controllers
@@ -15,14 +17,17 @@ namespace project.Controllers
         private readonly UserManager<ApplicationUser> _userManager;
 		private readonly SignInManager<ApplicationUser> _signInManager;
 		private readonly RoleManager<IdentityRole> _roleManager;
+        private readonly ApplicationDbContext _context;
      
 
-        public AccountController(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager, RoleManager<IdentityRole> roleManager)
+        
+
+        public AccountController(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager, RoleManager<IdentityRole> roleManager, ApplicationDbContext context)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _roleManager = roleManager;
-            
+            _context = context;
         }
 
 
@@ -216,7 +221,6 @@ namespace project.Controllers
 
         #endregion
 
-
         #region ForgetPassword
         //public IActionResult ForgotPassword()
         //{
@@ -390,6 +394,55 @@ namespace project.Controllers
 		{
 			return View();
 		}
+        #endregion
+
+        #region ProfileView
+
+        public async Task<IActionResult> ProfileView(string userId)
+        {
+            var user = _userManager.Users
+        .Include(u => u.Books)
+        .FirstOrDefault(u => u.Id == userId);
+
+            if (user == null)
+            {
+                return NotFound();
+            }
+
+            // Get all reviews the user has posted
+            var reviews = _context.Reviews
+                .Include(r => r.Book) // Load the Book entity for each review
+                .Where(r => r.UserId == userId) // Filter reviews by userId
+                .Select(r => new ReviewViewModel
+                {
+                    BookTitle = r.Book.Title,
+                    Rating = r.Rating,
+                    Comment = r.Comment,
+                    DatePosted = r.DatePosted,
+                    BookPhotoUrl = r.Book.PhotoUrl // Book photo URL
+                })
+                .ToList();
+
+            double averageRating = reviews.Any() ? reviews.Average(r => r.Rating) : 0;
+
+            var viewModel = new ProfileViewModel
+            {
+                FullName = user.FullName,
+                Email = user.Email,
+                PhotoUrl = user.Photo != null ? $"data:image/jpeg;base64,{Convert.ToBase64String(user.Photo)}" : "default-profile.png",
+                Address = user.Address,
+                City = user.City,
+                State = user.State,
+                PostalCode = user.PostalCode,
+                Country = user.Country,
+                BooksPublished = user.Books.Count,
+                ReviewsWritten = reviews.Count,
+                AverageRating = averageRating,
+                Reviews = reviews
+            };
+
+            return View(viewModel);
+        }
         #endregion
     }
 }
