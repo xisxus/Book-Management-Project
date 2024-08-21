@@ -89,17 +89,23 @@
                                         <tbody>
                                             @foreach (var review in Model.Reviews)
                                             {
-
+                                                
                                                
 
                                                 <tr>
                                                     <td><img src="@(review.BookPhotoUrl)" alt="Book Photo" class="book-photo" width="60" /></td>
-                                                    <td><strong>@review.BookTitle</strong></td>
-                                                    <td>@review.Rating <span class="emoji">⭐</span></td>
                                                     <td>
                                                         <a href="@Url.Action("BookDetails", "Books", new { Id = review.BookId })">
-                                                        @review.Comment
+                                                        
+                                                        <strong>@review.BookTitle</strong>
+
                                                         </a>
+                                                    </td>
+                                                    <td>@review.Rating <span class="emoji">⭐</span></td>
+                                                    <td>
+                                                        
+                                                        @review.Comment
+                                                       
                                                     </td>
                                                     <td>@review.DatePosted.ToShortDateString()</td>
                                                 </tr>

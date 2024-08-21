@@ -13,6 +13,7 @@
         public int BooksPublished { get; set; }
         public int ReviewsWritten { get; set; }
         public double AverageRating { get; set; }
+        
         public List<ReviewViewModel> Reviews { get; set; }
     }
 

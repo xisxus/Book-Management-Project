@@ -415,6 +415,7 @@ namespace project.Controllers
                 .Where(r => r.UserId == userId) // Filter reviews by userId
                 .Select(r => new ReviewViewModel
                 {
+                    BookId = r.Id,
                     BookTitle = r.Book.Title,
                     Rating = r.Rating,
                     Comment = r.Comment,
@@ -439,6 +440,7 @@ namespace project.Controllers
                 ReviewsWritten = reviews.Count,
                 AverageRating = averageRating,
                 Reviews = reviews
+                
             };
 
             return View(viewModel);
