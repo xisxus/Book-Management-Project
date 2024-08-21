@@ -1,0 +1,38 @@
+﻿@model IEnumerable<Book>
+
+@{
+    ViewData["Title"] = "Search";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+
+<h2>Search Results</h2>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Photo</th>
+            <th>Title</th>
+            <th>Author</th>
+            <th>Genre</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var book in Model)
+        {
+            <tr>
+                <td><img src="@book.PhotoUrl" height="100" /></td>
+                <td>@book.Title</td>
+                <td>@book.Author</td>
+                <td>@book.Genre</td>
+                <td>
+                    <a href="@Url.Action("BookDetails", "Books", new { Id = @book.BookId })">View Details</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+

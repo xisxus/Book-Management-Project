@@ -42,7 +42,7 @@
                                 <p class="card-text">Average Rating: @item.AverageRating.ToString("0.0")</p>
                                 <p class="card-text">Number of Reviews: @item.ReviewCount</p>
                                 <p class="card-text">Published: @item.Book.PublishedDate.ToShortDateString()</p>
-                                <a href="@Url.Action("ReviewRating", "Books", new { bookId = item.Book.BookId })" class="btn btn-primary">View Reviews</a>
+                               @*  <a href="@Url.Action("ReviewRating", "Books", new { bookId = item.Book.BookId })" class="btn btn-primary">View Reviews</a> *@
                             </div>
                         </div>
                     </div>
