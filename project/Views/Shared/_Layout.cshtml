@@ -87,9 +87,13 @@
                             </form>
                         </li>
                         <li>
-                            <a href="#" data-toggle="modal" data-target="#editProfileModal"><i class="fa fa-user-o"></i>Eidt</a>
-                            <a href="#" data-toggle="modal" data-target="#viewProfileModal"><i class="fa fa-user-o"></i>Register</a>
+                            <a href="#" data-toggle="modal" data-target="#editProfileModal"><i class="fa fa-user-o"></i>Edit Profile</a>
                         </li>
+                       @*  <li>
+                            <a href="#" data-toggle="modal" data-target="#viewProfileModal"><i class="fa fa-user-o"></i>Register</a>
+                        </li> *@
+                        
+                       
                     }
                     else
                     {
@@ -111,7 +115,7 @@
         <div id="header">
             <div class="container">
                 <div class="row">
-                    <div class="col-md-3">
+                    <div class="col-md-6">
                         <div class="header-logo">
                             <a href="#" class="logo">
                                 <img src="~/img/logo.png" alt="">
@@ -131,31 +135,7 @@
                             </form>
                         </div>
                     </div>
-                    <div class="col-md-3 clearfix">
-                        <div class="header-ctn">
-                            <div>
-                                <a href="#">
-                                    <i class="fa fa-heart-o"></i>
-                                    <span>Your Wishlist</span>
-                                    <div class="qty">2</div>
-                                </a>
-                            </div>
-                            <div class="dropdown">
-                                <a class="dropdown-toggle" data-toggle="dropdown" aria-expanded="true">
-                                    <i class="fa fa-shopping-cart"></i>
-                                    <span>Your Cart</span>
-                                    <div class="qty">3</div>
-                                </a>
-                             
-                            </div>
-                            <div class="menu-toggle">
-                                <a href="#">
-                                    <i class="fa fa-bars"></i>
-                                    <span>Menu</span>
-                                </a>
-                            </div>
-                        </div>
-                    </div>
+                   
                 </div>
             </div>
         </div>
@@ -169,10 +149,18 @@
             <div id="responsive-nav">
                 <ul class="main-nav nav navbar-nav">
                     <li class="active"><a asp-area="" asp-controller="Home" asp-action="Index">Home</a></li>
-                    <li><a href="@Url.Action("Index", "Books")">Books</a></li>
-                    <li><a href="@Url.Action("IndividualIndex", "Books")">YourBooks</a></li>
-                   
-                    <li><a href="@Url.Action("BookShowcase", "Books")">BooksShow</a></li>
+
+                    @if (SignInManager.IsSignedIn(User) && User.IsInRole("Admin"))
+                    {
+                        <li><a href="@Url.Action("Index", "Books")">Books</a></li>
+                    }
+
+                    @if (SignInManager.IsSignedIn(User))
+                    {
+                         <li><a href="@Url.Action("IndividualIndex", "Books")">YourBooks</a></li>
+                    }
+
+                    <li><a href="@Url.Action("BookShowcase", "Books")">All-Books</a></li>
                    
                 </ul>
             </div>
@@ -188,16 +176,8 @@
     </div>
 
 
-    @{
-        var userId = UserManager.GetUserId(User);
-    }
-
-
-    <h1>
-        <a href="@Url.Action("ProfileView", "Account", new { userId = userId })" class="btn btn-primary">
-            My Profile
-        </a>
-    </h1>
+   
+   
 
     <!-- Login Modal -->
     <div class="modal fade" id="loginModal" tabindex="-1" role="dialog" aria-labelledby="loginModalLabel" aria-hidden="true">

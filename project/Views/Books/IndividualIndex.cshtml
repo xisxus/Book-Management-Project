@@ -8,7 +8,7 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1>@ViewData["Title"]</h1>
+<h1>Your Books</h1>
 
 <p>
     <!-- Button to trigger modal -->
@@ -41,9 +41,9 @@
                     <button type="button" class="btn btn-warning btn-sm" data-toggle="modal" data-target="#editBookModal" data-id="@item.BookId">
                         Edit
                     </button>|
-                    <a asp-action="Details" asp-route-id="@item.BookId">Details</a> |
+                    <a asp-action="IndividualIndex" asp-route-id="@item.BookId">Details</a> |
                     <a asp-action="Delete" asp-route-id="@item.BookId">Delete</a>
-                    <a asp-action="ReviewRating" asp-route-bookId="@item.BookId">View Reviews and Ratings</a>
+                   @*  <a asp-action="ReviewRating" asp-route-bookId="@item.BookId">View Reviews and Ratings</a> *@
 
                 </td>
             </tr>

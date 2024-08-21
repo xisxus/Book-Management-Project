@@ -35,11 +35,7 @@ namespace project.Controllers
             return View(await _context.Books.ToListAsync());
         }
 
-        //[HttpGet]
-        //public async Task<IActionResult> Create()
-        //{
-        //    return View();
-        //}
+       
         [Authorize]
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -69,18 +65,7 @@ namespace project.Controllers
 
             return RedirectToAction("Index");
 
-            //return Json(new
-            //{
-            //    id = book.BookId,
-            //    title = book.Title,
-            //    author = book.Author,
-            //    genre = book.Genre,
-            //    publishedDate = book.PublishedDate.ToString("yyyy-MM-dd"),
-            //    photoUrl = book.PhotoUrl
-            //});
-
-            //var newBook = _context.Books.FirstOrDefault(x => x.PhotoUrl == book.PhotoUrl);
-            //return RedirectToAction("BookDetails", new { Id = newBook.BookId });
+        
 
         }
 
@@ -137,7 +122,7 @@ namespace project.Controllers
                 _context.Books.Update(book);
                 await _context.SaveChangesAsync();
 
-                 return RedirectToAction("Index");
+                 return RedirectToAction("IndividualIndex");
             //}
 
             //return Json(new { success = false, error = "Validation error" });
@@ -184,7 +169,7 @@ namespace project.Controllers
             var book = await _context.Books.FindAsync(id);
             _context.Books.Remove(book);
             await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+            return RedirectToAction(nameof(IndividualIndex));
         }
 
         private bool BookExists(int id)
@@ -219,22 +204,38 @@ namespace project.Controllers
 
             var userId = _userManager.GetUserId(User);  // Get the current user's ID
 
-            var review = new Review
-            {
-                BookId = bookId,
-                UserId = userId,
-                Rating = rating,
-                Comment = comment,
-                DatePosted = DateTime.Now
-            };
+            // Check if the user has already submitted a review for this book
+            var existingReview = _context.Reviews.FirstOrDefault(r => r.BookId == bookId && r.UserId == userId);
 
-            _context.Reviews.Add(review);
+            if (existingReview != null)
+            {
+                // Update the existing review
+                existingReview.Rating = rating;
+                existingReview.Comment = comment;
+                existingReview.DatePosted = DateTime.Now;
+            }
+            else
+            {
+                // Add a new review
+                var newReview = new Review
+                {
+                    BookId = bookId,
+                    UserId = userId,
+                    Rating = rating,
+                    Comment = comment,
+                    DatePosted = DateTime.Now
+                };
+
+                _context.Reviews.Add(newReview);
+            }
+
             _context.SaveChanges();
 
             return RedirectToAction("BookDetails", new { Id = bookId });
         }
 
-        
+
+
 
 
         public IActionResult BookShowcase()

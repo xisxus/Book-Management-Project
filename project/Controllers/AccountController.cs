@@ -7,6 +7,7 @@ using Humanizer;
 using project.Models.Extension;
 using Microsoft.EntityFrameworkCore;
 using project.Models.Data;
+using Microsoft.AspNetCore.Authorization;
 
 
 namespace project.Controllers
@@ -100,12 +101,25 @@ namespace project.Controllers
 
                 if (result.Succeeded)
                 {
-                    if (!await _roleManager.RoleExistsAsync("User"))
+                    // Check if no users exist before assigning roles
+                    if (!_userManager.Users.Any())
                     {
-                        await _roleManager.CreateAsync(new IdentityRole("User"));
+                        // If no users exist, create and assign Admin role
+                        if (!await _roleManager.RoleExistsAsync("Admin"))
+                        {
+                            await _roleManager.CreateAsync(new IdentityRole("Admin"));
+                        }
+                        await _userManager.AddToRoleAsync(user, "Admin");
                     }
-
-                    await _userManager.AddToRoleAsync(user, "User");
+                    else
+                    {
+                        // Ensure "User" role exists, then assign it
+                        if (!await _roleManager.RoleExistsAsync("User"))
+                        {
+                            await _roleManager.CreateAsync(new IdentityRole("User"));
+                        }
+                        await _userManager.AddToRoleAsync(user, "User");
+                    }
 
                     await _signInManager.SignInAsync(user, isPersistent: false);
 
@@ -316,14 +330,17 @@ namespace project.Controllers
         #endregion
 
         #region AssignRole
+        [Authorize(Roles = "Admin")]
         [HttpGet]
+        
 		public IActionResult AssignRole()
 		{
 			var users = _userManager.Users.ToList();
 			return View(users);
 		}
 
-		[HttpPost]
+        [Authorize(Roles = "Admin")]
+        [HttpPost]
 		public async Task<IActionResult> AssignRole(string userId, string roleName)
 		{
 			var user = await _userManager.FindByIdAsync(userId);
@@ -364,6 +381,8 @@ namespace project.Controllers
         #endregion
 
         #region userWithRole
+
+        [Authorize(Roles = "Admin")]
 
         public async Task<IActionResult> UsersWithRoles()
 		{
