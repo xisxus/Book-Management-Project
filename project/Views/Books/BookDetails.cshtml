@@ -162,6 +162,12 @@
                     <div class="ClientReview_Card">
                         @foreach (var review in Model.Book.Reviews)
                         {
+
+                            <a href="@Url.Action("ProfileView", "Account", new { userId = review.User.Id })">
+                               
+                           
+
+
                             <div class="ClientReview_Top">
                                 <div class="ClientReview_Pfp">
                                     @if (review.User.Photo != null && review.User.Photo.Length > 0)
@@ -191,6 +197,8 @@
                             <div class="ClientReview_Img">
                                 <div class="date"><span class="text-muted">@review.DatePosted.ToShortDateString()</span></div>
                             </div>
+
+                            </a>
                             <hr>
                         }
                     </div>

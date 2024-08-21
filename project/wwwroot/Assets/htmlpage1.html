@@ -1,0 +1,72 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+</head>
+<body>
+
+
+
+    @model project.Models.ViewModels.ProfileViewModel
+    @{
+    ViewData["Title"] = "ProfileView";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    }
+
+    <h1>ProfileView</h1>
+
+
+
+    <div class="profile-container">
+        <div class="profile-header">
+            <img src="@(Model.PhotoUrl)" alt="Profile Photo" class="profile-photo" />
+            <h1>@Model.FullName</h1>
+            <p>@Model.Email</p>
+            <p>@Model.Address, @Model.City, @Model.State, @Model.PostalCode, @Model.Country</p>
+        </div>
+
+        <div class="profile-stats">
+            <div>
+                <strong>Books Published:</strong> @Model.BooksPublished
+            </div>
+            <div>
+                <strong>Reviews Written:</strong> @Model.ReviewsWritten
+            </div>
+            <div>
+                <strong>Average Rating:</strong> @Model.AverageRating.ToString("0.0")
+            </div>
+        </div>
+
+        <div class="reviews-section">
+            <h2>Reviews</h2>
+            @if (Model.Reviews.Any())
+            {
+            foreach (var review in Model.Reviews)
+            {
+            <div class="review">
+                <img src="@(review.BookPhotoUrl)" alt="Book Photo" class="book-photo" />
+                <h3>@review.BookTitle</h3>
+                <p><strong>Rating:</strong> @review.Rating</p>
+                <p>@review.Comment</p>
+                <p><small>@review.DatePosted.ToShortDateString()</small></p>
+            </div>
+            }
+            }
+            else
+            {
+            <p>No reviews found.</p>
+            }
+        </div>
+    </div>
+
+
+
+
+
+
+
+
+
+</body>
+</html>

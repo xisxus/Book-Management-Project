@@ -428,8 +428,8 @@ namespace project.Controllers
             var viewModel = new ProfileViewModel
             {
                 FullName = user.FullName,
-                Email = user.Email,
-                PhotoUrl = user.Photo != null ? $"data:image/jpeg;base64,{Convert.ToBase64String(user.Photo)}" : "default-profile.png",
+                Email = user.Email,            
+                PhotoUrl = user.Photo != null ? $"data:image/jpeg;base64,{Convert.ToBase64String(user.Photo)}" : "/uploads/images (2).jpg",
                 Address = user.Address,
                 City = user.City,
                 State = user.State,
