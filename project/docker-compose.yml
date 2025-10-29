@@ -1,0 +1,50 @@
+﻿version: '3'
+services:
+  prosody:
+    image: jitsi/prosody:latest
+    restart: always
+    volumes:
+      - ./config/prosody:/config
+    networks:
+      - meet.jitsi
+
+  web:
+    image: jitsi/web:latest
+    restart: always
+    ports:
+      - '8080:80'  # Use 8080 to avoid conflict with your app's port
+      - '8443:443'
+    volumes:
+      - ./config/web:/config
+    environment:
+      - ENABLE_LETSENCRYPT=0  # No certs needed locally
+      - PUBLIC_URL=http://localhost:8080
+    networks:
+      - meet.jitsi
+
+  jicofo:
+    image: jitsi/jicofo:latest
+    restart: always
+    volumes:
+      - ./config/jicofo:/config
+    depends_on:
+      - prosody
+    networks:
+      - meet.jitsi
+
+  jvb:
+    image: jitsi/jvb:latest
+    restart: always
+    ports:
+      - '10000-20000:10000-20000/udp'  # Media ports
+    volumes:
+      - ./config/jvb:/config
+    environment:
+      - DOCKER_HOST_ADDRESS=192.168.1.100  # CHANGE THIS: Replace with your machine's IP (run 'ipconfig' or 'ifconfig' to find)
+    depends_on:
+      - prosody
+    networks:
+      - meet.jitsi
+
+networks:
+  meet.jitsi:
