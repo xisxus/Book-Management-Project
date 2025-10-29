@@ -37,3 +37,6 @@
 //        await client.SendMailAsync(mailMessage);
 //    }
 //}
+
+
+//https://grok.com/share/c2hhcmQtNA%3D%3D_4c352624-25a8-4c57-ad39-7f7836552594
